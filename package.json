@@ -3,11 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
- "scripts": {
-  "dev": "concurrently \"npm run dev --prefix backend\" \"vite\"",
-  "build": "vite build",
-  "preview": "vite preview"
-},
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix backend\" \"vite\"",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.3.0",
