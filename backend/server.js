@@ -10,9 +10,13 @@ app.use(express.json());
 
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    ssl: {
+        rejectUnauthorized: false,
+    },
 });
 
 db.connect((err) => {
@@ -61,44 +65,6 @@ app.post("/login", (req, res) => {
 
     });
 
-});
-
-app.post("/login", (req, res) => {
-  const { email, password } = req.body;
-
-  const sql = "SELECT * FROM users WHERE email = ?";
-
-  db.query(sql, [email], async (err, result) => {
-    if (err) {
-      return res.status(500).json(err);
-    }
-
-    if (result.length === 0) {
-      return res.status(404).json({
-        message: "User not found",
-      });
-    }
-
-    const user = result[0];
-
-    const valid = await bcrypt.compare(password, user.password);
-
-    if (!valid) {
-      return res.status(401).json({
-        message: "Incorrect password",
-      });
-    }
-
-    res.json({
-      success: true,
-      user: {
-        id: user.id,
-        name: user.fullname,
-        email: user.email,
-        profileImage: user.profile_image,
-      },
-    });
-  });
 });
 
 app.listen(5000, () => {
