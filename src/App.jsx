@@ -8,7 +8,7 @@ import Home from "./Pages/Home";
 import About from "./Pages/About";
 import CoursePage from "./Pages/CoursePage";
 import BlogPage from "./Pages/BlogPage";
-import ContactPage from "./Pages/Contactpage";
+import ContactPage from "./Pages/ContactPage";
 import StudentDashboard from "./Pages/StudentDashboard";
 import TopTechSkills2026 from "./Pages/TopTechSkills2026";
 import FutureWebDevelopment from "./Pages/FutureWebDevelopment";
