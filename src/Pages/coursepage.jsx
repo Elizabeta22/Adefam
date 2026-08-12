@@ -1,6 +1,6 @@
-import CourseFilters from "../Components/courses/CourseFilters";
-import CategoriesSidebar from "../Components/courses/CategoriesSidebar";
-import CoursesGrid from "../Components/courses/CoursesGrid";
+import CourseFilters from "../Components/courses/coursefilters";
+import CategoriesSidebar from "../Components/courses/categoriessidebar";
+import CoursesGrid from "../Components/courses/coursesgrid";
 
 const CoursePage = () => {
   return (

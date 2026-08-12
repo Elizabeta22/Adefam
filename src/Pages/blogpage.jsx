@@ -1,5 +1,5 @@
-import FeaturedPost from "../Components/blog/FeaturedPost";
-import BlogList from "../Components/blog/BlogList";
+import FeaturedPost from "../Components/blog/featuredpost";
+import BlogList from "../Components/blog/bloglist";
 
 const BlogPage = () => {
   return (
