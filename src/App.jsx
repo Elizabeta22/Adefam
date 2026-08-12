@@ -1,10 +1,10 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
+import Header from "./Components/header";
+import Footer from "./Components/footer";
 
-import Home from "./Pages/Home";
+import Home from "./Pages/home";
 import About from "./Pages/About";
 import CoursePage from "./Pages/CoursePage";
 import BlogPage from "./Pages/BlogPage";
