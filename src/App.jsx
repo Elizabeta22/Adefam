@@ -13,12 +13,12 @@ import StudentDashboard from "./Pages/studentdashboard";
 import TopTechSkills2026 from "./Pages/TopTechSkills2026";
 import FutureWebDevelopment from "./Pages/FutureWebDevelopment";
 import BeginnerDataAnalysis from "./Pages/BeginnerDataAnalysis";
-import CybersecurityBestPractices from "./Pages/CybersecurityBestPractices";
+import CybersecurityBestPractices from "./Pages/CyberSecurityBestPractices";
 import SuccessfulTechCareer from "./Pages/SuccessfulTechCareer";
 
 
-import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
+import Login from "./Pages/login";
+import Signup from "./Pages/signup";
 
 
 function App() {
