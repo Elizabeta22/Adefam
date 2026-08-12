@@ -48,7 +48,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-yellow-600 px-4">
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
         <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">
           Create Account
@@ -108,7 +108,7 @@ const Signup = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-700 text-white py-3 rounded-lg hover:bg-blue-800"
+            className="w-full bg-yellow-600 text-white py-3 rounded-lg hover:bg-yellow-700"
           >
             Sign Up
           </button>
@@ -118,7 +118,7 @@ const Signup = () => {
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-blue-700 font-semibold"
+            className="text-yellow-600 font-semibold"
           >
             Login
           </Link>

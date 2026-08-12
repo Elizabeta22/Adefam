@@ -1,105 +1,188 @@
 const express = require("express");
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const app = express();
 require("dotenv").config();
 
+const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    ssl: {
-        rejectUnauthorized: false,
-    },
+// =========================
+// MySQL Connection Pool
+// =========================
+
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+
+  ssl: {
+    rejectUnauthorized: false,
+  },
+
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
-db.connect((err) => {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("MySQL Connected");
-    }
-});
+// =========================
+// Test Database Connection
+// =========================
 
-app.post("/login", (req, res) => {
+async function testDatabase() {
+  try {
+    const connection = await db.getConnection();
 
-    const { email, password } = req.body;
+    console.log("MySQL/Aiven Connected Successfully");
 
-    const sql =
-        "SELECT * FROM users WHERE email=?";
+    connection.release();
+  } catch (error) {
+    console.error("MySQL Connection Error:", error.message);
+  }
+}
 
-    db.query(sql, [email], async (err, result) => {
+testDatabase();
 
-        if (result.length === 0) {
-            return res.status(404).json({
-                message: "User not found"
-            });
-        }
-
-        const valid = await bcrypt.compare(
-            password,
-            result[0].password
-        );
-
-        if (!valid) {
-           return res.status(401).json({
-                message: "Incorrect password"
-});
-        }
-
-        res.json({
-    success: true,
-    user: {
-        id: result[0].id,
-        name: result[0].fullname,
-        email: result[0].email,
-        profileImage: result[0].profile_image,
-    },
-});
-
-    });
-
-});
-
-app.listen(5000, () => {
-    console.log("Server running on port 5000");
-});
+// =========================
+// Home Route
+// =========================
 
 app.get("/", (req, res) => {
-  res.send("Backend is running successfully!");
+  res.json({
+    success: true,
+    message: "Adefam backend is running successfully!",
+  });
 });
 
-
+// =========================
+// SIGNUP
+// =========================
 
 app.post("/signup", async (req, res) => {
-
+  try {
     const { name, email, password } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Validate input
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, email and password are required.",
+      });
+    }
 
-    const sql =
-        "INSERT INTO users(fullname,email,password) VALUES(?,?,?)";
-
-    db.query(
-        sql,
-        [name, email, hashedPassword],
-        (err, result) => {
-
-            if (err) {
-                return res.status(500).json(err);
-            }
-
-            res.json({
-                message: "User created successfully"
-            });
-
-        }
+    // Check if user already exists
+    const [existingUsers] = await db.query(
+      "SELECT id FROM users WHERE email = ?",
+      [email]
     );
 
+    if (existingUsers.length > 0) {
+      return res.status(409).json({
+        success: false,
+        message: "An account with this email already exists.",
+      });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert user
+    const [result] = await db.query(
+      "INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)",
+      [name, email, hashedPassword]
+    );
+
+    console.log("New user created:", result.insertId);
+
+    return res.status(201).json({
+      success: true,
+      message: "User created successfully.",
+      userId: result.insertId,
+    });
+
+  } catch (error) {
+    console.error("SIGNUP ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Signup failed.",
+    });
+  }
+});
+
+// =========================
+// LOGIN
+// =========================
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required.",
+      });
+    }
+
+    const [users] = await db.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
+
+    if (users.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    const user = users[0];
+
+    const validPassword = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!validPassword) {
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password.",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Login successful.",
+      user: {
+        id: user.id,
+        name: user.fullname,
+        email: user.email,
+        profileImage: user.profile_image || "",
+      },
+    });
+
+  } catch (error) {
+    console.error("LOGIN ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Login failed.",
+    });
+  }
+});
+
+// =========================
+// SERVER
+// =========================
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Adefam backend running on port ${PORT}`);
 });
