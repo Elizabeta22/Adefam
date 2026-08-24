@@ -6,6 +6,8 @@ require("dotenv").config();
 
 const app = express();
 
+app.use(express.json());
+
 // Middleware
 const allowedOrigins = [
   "https://adefam-cf4t-git-main-adefam1.vercel.app",
