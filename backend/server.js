@@ -42,13 +42,15 @@ async function testDatabase() {
   try {
     const connection = await db.getConnection();
 
-    console.log("MySQL/Aiven Connected Successfully");
+    console.log("✅ MySQL/Aiven Connected Successfully");
 
     connection.release();
   } catch (error) {
-    console.error("MySQL Connection Error:", error.message);
+    console.error("❌ MySQL Connection Error:", error.message);
   }
 }
+
+testDatabase();
 
 testDatabase();
 
