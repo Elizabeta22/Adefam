@@ -9,7 +9,6 @@ const app = express();
 // Middleware
 const allowedOrigins = [
   "https://adefam-cf4t-git-main-adefam1.vercel.app",
-  "https://adefam-cf4t-xi.vercel.app"
 ];
 
 app.use(cors({
@@ -59,8 +58,6 @@ async function testDatabase() {
     console.error("❌ MySQL Connection Error:", error.message);
   }
 }
-
-testDatabase();
 
 testDatabase();
 
@@ -124,10 +121,11 @@ app.post("/signup", async (req, res) => {
   } catch (error) {
     console.error("SIGNUP ERROR:", error);
 
-    return res.status(500).json({
-      success: false,
-      message: "Signup failed.",
-    });
+   return res.status(500).json({
+  success: false,
+  message: "Signup failed.",
+  error: error.message,
+});
   }
 });
 
