@@ -24,7 +24,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      await axios.post("https://adefam.onrender.com/signup", {
+      await axios.post("https://adefam-1.onrender.com/signup", {
         name: formData.name,
         email: formData.email,
         password: formData.password,

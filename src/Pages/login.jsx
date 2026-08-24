@@ -27,7 +27,7 @@ const Login = () => {
 
   try {
     const response = await axios.post(
-      "https://adefam.onrender.com/login",
+      "https://adefam-1.onrender.com/login",
       {
         email: loginData.email,
         password: loginData.password,
