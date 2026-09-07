@@ -7,7 +7,7 @@ import Footer from "./Components/footer";
 import Home from "./Pages/home";
 import About from "./Pages/about";
 import CoursePage from "./Pages/coursepage";
-import BlogPage from "./Pages/BlogPage";
+import BlogPage from "./Pages/blogpage";
 import ContactPage from "./Pages/contactpage";
 import StudentDashboard from "./Pages/studentdashboard";
 import TopTechSkills2026 from "./Pages/TopTechSkills2026";
