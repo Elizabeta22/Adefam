@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,182 +11,282 @@ const Login = () => {
     password: "",
   });
 
-
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleChange = (e) => {
     setLoginData({
       ...loginData,
       [e.target.name]: e.target.value,
     });
+
+    setError("");
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  setError("");
+    setError("");
+    setLoading(true);
 
-  try {
-    const response = await axios.post(
-      "https://adefam-1.onrender.com/login",
-      {
-        email: loginData.email,
-        password: loginData.password,
+    try {
+      const response = await axios.post(
+        "https://adefam-1.onrender.com/login",
+        {
+          email: loginData.email,
+          password: loginData.password,
+        }
+      );
+
+      // Save logged-in user
+      localStorage.setItem(
+        "user",
+        JSON.stringify(response.data)
+      );
+
+      alert("Login Successful");
+
+      navigate("/student-dashboard");
+    } catch (err) {
+      console.error("Login error:", err);
+
+      if (err.response) {
+        setError(
+          err.response.data.message ||
+            "Invalid email or password."
+        );
+      } else {
+        setError(
+          "Server not responding. Please try again."
+        );
       }
-    );
-
-    // Save logged in user
-    localStorage.setItem(
-      "user",
-      JSON.stringify(response.data)
-    );
-
-    alert("Login Successful");
-
-    navigate("/student-dashboard");
-
-  } catch (err) {
-    if (err.response) {
-      setError(err.response.data.message);
-    } else {
-      setError("Server not responding");
+    } finally {
+      setLoading(false);
     }
-  }
-};
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-6xl grid lg:grid-cols-3 gap-8 items-center">
+  };
 
-        {/* Left Illustration */}
-        <div className="hidden lg:flex justify-center">
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
+
+      <div className="w-full max-w-7xl bg-white shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+
+        {/* ========================= */}
+        {/* LEFT IMAGE SECTION */}
+        {/* ========================= */}
+
+        <div className="relative min-h-[700px] overflow-hidden">
+
+          {/* Background Image */}
           <img
-            src="/datasec.png"
-            alt="Login Illustration"
-            className="w-full max-w-sm"
+            src="/studentsignup.jpg"
+            alt="Students learning technology"
+            className="absolute inset-0 w-full h-full object-cover"
           />
+
+          {/* Dark Overlay */}
+          <div className="absolute inset-0 bg-black/50"></div>
+
+          {/* Decorative Orange Shape */}
+          <div className="absolute top-20 left-[-450px] w-[600px] h-[300px] border-[35px] border-yellow-600 rounded-full rotate-[-8deg] opacity-80"></div>
+
+          <div className="absolute bottom-[-100px] right-[-100px] w-[500px] h-[300px] border-[35px] border-yellow-600 rounded-full rotate-[-30deg] opacity-70"></div>
+
+          {/* Text */}
+          <div className="absolute bottom-14 left-10 right-10 z-10">
+
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-5">
+              Welcome Back
+            </h1>
+
+            <p className="text-lg md:text-xl text-white leading-8 max-w-xl">
+              Sign in to your Adefam account and
+              continue learning valuable technology
+              skills.
+            </p>
+
+          </div>
         </div>
 
-        {/* Login Card */}
-        <div className="bg-white rounded-xl shadow-lg border p-8">
-          <h2 className="text-2xl font-bold text-yellow-800">
-            Welcome Back
-          </h2>
 
-          <p className="text-gray-500 text-sm mt-1">
-            Sign in to continue learning
-          </p>
+        {/* ========================= */}
+        {/* RIGHT LOGIN SECTION */}
+        {/* ========================= */}
 
-          {error && (
-            <div className="mt-4 bg-red-100 text-red-600 p-3 rounded-lg">
-              {error}
+        <div className="px-8 py-10 md:px-12 lg:px-14">
+
+          <div className="w-full max-w-xl mx-auto">
+
+            {/* Heading */}
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+              Welcome Back
+            </h2>
+
+            <p className="text-xl text-gray-500 mt-3 mb-10">
+              Sign in to continue learning.
+            </p>
+
+
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg">
+                {error}
+              </div>
+            )}
+
+
+            {/* ========================= */}
+            {/* LOGIN FORM */}
+            {/* ========================= */}
+
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-6"
+            >
+
+              {/* Email */}
+              <div>
+
+                <label className="block text-lg font-semibold text-gray-700 mb-3">
+                  Email Address
+                </label>
+
+                <input
+                  type="email"
+                  name="email"
+                  value={loginData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  required
+                  className="w-full bg-gray-50 border border-gray-300 rounded-2xl px-6 py-5 text-lg outline-none focus:border-yellow-600 focus:ring-2 focus:ring-yellow-100"
+                />
+
+              </div>
+
+
+              {/* Password */}
+              <div>
+
+                <label className="block text-lg font-semibold text-gray-700 mb-3">
+                  Password
+                </label>
+
+                <div className="relative">
+
+                  <input
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
+                    name="password"
+                    value={loginData.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                    required
+                    className="w-full bg-gray-50 border border-gray-300 rounded-2xl px-6 py-5 pr-16 text-lg outline-none focus:border-yellow-600 focus:ring-2 focus:ring-yellow-100"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setShowPassword(!showPassword)
+                    }
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showPassword ? (
+                      <EyeOff size={25} />
+                    ) : (
+                      <Eye size={25} />
+                    )}
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              {/* Remember Me + Forgot Password */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+
+                <label className="flex items-center gap-3 text-gray-600">
+
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) =>
+                      setRememberMe(e.target.checked)
+                    }
+                    className="w-5 h-5 accent-yellow-600"
+                  />
+
+                  <span>
+                    Remember me
+                  </span>
+
+                </label>
+
+
+                <Link
+                  to="/forgot-password"
+                  className="text-yellow-600 font-medium hover:underline"
+                >
+                  Forgot Password?
+                </Link>
+
+              </div>
+
+
+              {/* Login Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-400 text-white font-semibold text-lg py-5 rounded-2xl shadow-md transition"
+              >
+                {loading
+                  ? "Logging in..."
+                  : "Login"}
+              </button>
+
+            </form>
+
+
+            {/* ========================= */}
+            {/* DIVIDER */}
+            {/* ========================= */}
+
+            <div className="flex items-center gap-4 my-8">
+
+              <div className="flex-1 h-px bg-gray-200"></div>
+
+              <span className="text-gray-400 text-lg">
+                OR
+              </span>
+
+              <div className="flex-1 h-px bg-gray-200"></div>
+
             </div>
-          )}
+            
+            <p className="text-center mt-8 text-gray-500 text-lg">
 
-          <form
-            onSubmit={handleSubmit}
-            className="mt-6 space-y-4"
-          >
-            {/* Email */}
-            <div>
-              <label className="text-sm text-gray-600">
-                Email Address
-              </label>
-
-              <input
-                type="email"
-                name="email"
-                value={loginData.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-                required
-                className="w-full mt-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
-              />
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="text-sm text-gray-600">
-                Password
-              </label>
-
-              <input
-                type="password"
-                name="password"
-                value={loginData.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-                required
-                className="w-full mt-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
-              />
-            </div>
-
-            {/* Remember Me */}
-            <div className="flex justify-between items-center text-sm">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" />
-                Remember me
-              </label>
+              Don't have an account?{" "}
 
               <Link
-                to="/forgot-password"
-                className="text-yellow-600 hover:underline"
+                to="/signup"
+                className="text-yellow-600 font-semibold hover:underline"
               >
-                Forgot Password?
+                Sign Up
               </Link>
-            </div>
 
-            {/* Login Button */}
-            <button
-              type="submit"
-              className="w-full bg-yellow-600 text-white py-3 rounded-lg hover:bg-yellow-700 transition"
-            >
-              Login
-            </button>
-          </form>
+            </p>
 
-          {/* Divider */}
-          <div className="flex items-center my-5">
-            <div className="flex-1 border-t"></div>
-
-            <span className="px-3 text-sm text-gray-400">
-              or continue with
-            </span>
-
-            <div className="flex-1 border-t"></div>
           </div>
 
-          {/* Social Login */}
-          <div className="grid grid-cols-2 gap-3">
-            <button className="border rounded-lg py-3 hover:bg-yellow-50">
-              Google
-            </button>
-
-            <button className="border rounded-lg py-3 hover:bg-yellow-50">
-              Apple
-            </button>
-          </div>
-
-          {/* Register Link */}
-          <p className="text-center text-sm text-gray-500 mt-6">
-            Don't have an account?{" "}
-            <Link
-              to="/signup"
-              className="text-yellow-600 font-medium"
-            >
-              Sign Up
-            </Link>
-          </p>
         </div>
 
-        {/* Right Illustration */}
-        <div className="hidden lg:flex justify-center">
-          <img
-            src="/signup.png"
-            alt="Security Illustration"
-            className="w-full max-w-sm"
-          />
-        </div>
       </div>
+
     </div>
   );
 };

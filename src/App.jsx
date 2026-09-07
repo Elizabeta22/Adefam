@@ -7,7 +7,7 @@ import Footer from "./Components/footer";
 import Home from "./Pages/home";
 import About from "./Pages/about";
 import CoursePage from "./Pages/coursepage";
-import BlogPage from "./Pages/blogpage";
+import BlogPage from "./Pages/blogPage";
 import ContactPage from "./Pages/contactpage";
 import StudentDashboard from "./Pages/studentdashboard";
 import TopTechSkills2026 from "./Pages/TopTechSkills2026";
@@ -36,10 +36,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/student-dashboard" element={<StudentDashboard />} />
-        <Route path="/top-tech-skills-2026" element={<TopTechSkills2026 />} />
-        <Route path="/future-web-development" element={<FutureWebDevelopment />}/>
-        <Route path="/beginner-data-analysis" element={<BeginnerDataAnalysis />}/>
-        <Route path="/cybersecurity-best-practices" element={<CybersecurityBestPractices />}/>
+        <Route path="/best-tech-skills-2026" element={<TopTechSkills2026 />} />
+        <Route path="/future-web-development" element={<FutureWebDevelopment />} />
+        <Route path="/beginner-data-analysis" element={<BeginnerDataAnalysis />} />
+        <Route path="/cybersecurity-best-practices" element={<CybersecurityBestPractices />} />
         <Route path="/successful-tech-career" element={<SuccessfulTechCareer />} />
 
  

@@ -16,17 +16,20 @@ const FeaturedPost = () => {
 
         <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-6">
           <h2 className="text-2xl font-bold">
-            Top 10 Tech Skills to Learn in 2026
+            Best Tech Skills to Learn in 2026
           </h2>
 
-          <div className="flex justify-between mt-3 text-sm">
+          <div className="flex justify-between items-center mt-3 text-sm">
             <span>May 10, 2026</span>
-          <Link
-           to="/top-tech-skills-2026"
-           className="border border-yellow-600 text-yellow-600 px-8 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition"
-          >
-           Read More
-          </Link>
+
+            <a
+              href="https://codecampus.com.ng/best-tech-skills-2026/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-yellow-600 text-yellow-600 px-8 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition"
+            >
+              Read More
+            </a>
           </div>
         </div>
       </div>
@@ -35,3 +38,4 @@ const FeaturedPost = () => {
 };
 
 export default FeaturedPost;
+

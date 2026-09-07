@@ -3,7 +3,7 @@ import BlogList from "../Components/blog/bloglist";
 
 const BlogPage = () => {
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10">
+    <div className="max-w-6xl sky-50 mx-auto px-6 py-10">
       {/* Page Header */}
       <div>
         <h1 className="text-4xl font-bold text-slate-800">

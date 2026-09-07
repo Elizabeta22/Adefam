@@ -44,7 +44,7 @@ const Header = () => {
         <div className="hidden md:flex gap-2">
           <Link
             to="/login"
-            className="border px-3 py-2 rounded-lg text-sm"
+            className="border text-[#F09818] px-3 py-2 rounded-lg text-sm"
           >
             Login
           </Link>

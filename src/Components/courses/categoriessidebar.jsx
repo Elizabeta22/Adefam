@@ -1,4 +1,4 @@
-const CategoriesSidebar = () => {
+const CategoriesSidebar = ({ onCategoryChange, selectedCategory }) => {
   const categories = [
     "All Courses",
     "Web Development",
@@ -17,18 +17,24 @@ const CategoriesSidebar = () => {
       </h3>
 
       <ul className="space-y-4">
-        {categories.map((category, index) => (
-          <li
-            key={index}
-            className={`cursor-pointer ${
-              index === 0
-                ? "text-yellow-600 font-semibold"
-                : "text-gray-600"
-            }`}
-          >
-            {category}
-          </li>
-        ))}
+        {categories.map((category, index) => {
+          const filterCategory =
+            category === "All Courses" ? "All Categories" : category;
+
+          return (
+            <li
+              key={index}
+              onClick={() => onCategoryChange(filterCategory)}
+              className={`cursor-pointer transition ${
+                selectedCategory === filterCategory
+                  ? "text-yellow-600 font-semibold"
+                  : "text-gray-600 hover:text-yellow-600"
+              }`}
+            >
+              {category}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

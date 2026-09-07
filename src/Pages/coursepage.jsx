@@ -1,8 +1,16 @@
+import { useState } from "react";
+
 import CourseFilters from "../Components/courses/coursefilters";
 import CategoriesSidebar from "../Components/courses/categoriessidebar";
 import CoursesGrid from "../Components/courses/coursesgrid";
 
 const CoursePage = () => {
+  const [filters, setFilters] = useState({
+    searchTerm: "",
+    category: "All Categories",
+    level: "All Levels",
+  });
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
 
@@ -18,12 +26,13 @@ const CoursePage = () => {
       </div>
 
       {/* Search & Filters */}
-      <CourseFilters />
+      <CourseFilters onSearch={setFilters} />
 
       {/* Sidebar + Courses */}
       <div className="grid lg:grid-cols-4 gap-8 mt-8">
         <CategoriesSidebar />
-        <CoursesGrid />
+
+        <CoursesGrid filters={filters} />
       </div>
 
     </div>
