@@ -11,6 +11,7 @@ app.use(express.json());
 // Middleware
 const allowedOrigins = [
   "https://adefam-cf4t-git-main-adefam1.vercel.app",
+  "https://adefam-cf4t-1cs1vupq3-adefam1.vercel.app",
 ];
 
 app.use(cors({
