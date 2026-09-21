@@ -1,6 +1,8 @@
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://adefam-cf4t-xi.vercel.app",
   "https://adefam-cf4t-r86ktyu7b-adefam1.vercel.app",
+  
 ];
 
 app.use(
