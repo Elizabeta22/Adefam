@@ -1,3 +1,4 @@
+
 const express = require("express");
 const mysql = require("mysql2/promise");
 const cors = require("cors");
@@ -6,37 +7,42 @@ require("dotenv").config();
 
 const app = express();
 
+// =========================
+// MIDDLEWARE
+// =========================
+
 app.use(express.json());
 
-// Middleware
 const allowedOrigins = [
-  "https://adefam-cf4t-git-main-adefam1.vercel.app",
-  "https://adefam-cf4t-1cs1vupq3-adefam1.vercel.app",
+  "http://localhost:5173",
+  "https://adefam-cf4t-r86ktyu7b-adefam1.vercel.app",
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin
-    // (Postman, server-to-server requests, etc.)
-    if (!origin) {
-      return callback(null, true);
-    }
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests without an origin
+      if (!origin) {
+        return callback(null, true);
+      }
 
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
 
-    console.log("Blocked CORS origin:", origin);
-    return callback(null, false);
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
+      console.log("Blocked CORS origin:", origin);
 
-app.options("*", cors());
+      // Don't crash the server
+      return callback(null, false);
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 // =========================
-// MySQL Connection Pool
+// MYSQL CONNECTION
 // =========================
 
 const db = mysql.createPool({
@@ -56,25 +62,25 @@ const db = mysql.createPool({
 });
 
 // =========================
-// Test Database Connection
+// TEST DATABASE CONNECTION
 // =========================
 
 async function testDatabase() {
   try {
     const connection = await db.getConnection();
 
-    console.log("✅ MySQL/Aiven Connected Successfully");
+    console.log("MySQL/Aiven Connected Successfully");
 
     connection.release();
   } catch (error) {
-    console.error("❌ MySQL Connection Error:", error.message);
+    console.error("MySQL Connection Error:", error.message);
   }
 }
 
 testDatabase();
 
 // =========================
-// Home Route
+// HOME ROUTE
 // =========================
 
 app.get("/", (req, res) => {
@@ -92,7 +98,6 @@ app.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Validate input
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -116,7 +121,7 @@ app.post("/signup", async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert user
+    // Create user
     const [result] = await db.query(
       "INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)",
       [name, email, hashedPassword]
@@ -129,15 +134,14 @@ app.post("/signup", async (req, res) => {
       message: "User created successfully.",
       userId: result.insertId,
     });
-
   } catch (error) {
     console.error("SIGNUP ERROR:", error);
 
-   return res.status(500).json({
-  success: false,
-  message: "Signup failed.",
-  error: error.message,
-});
+    return res.status(500).json({
+      success: false,
+      message: "Signup failed.",
+      error: error.message,
+    });
   }
 });
 
@@ -192,13 +196,13 @@ app.post("/login", async (req, res) => {
         profileImage: user.profile_image || "",
       },
     });
-
   } catch (error) {
     console.error("LOGIN ERROR:", error);
 
     return res.status(500).json({
       success: false,
       message: "Login failed.",
+      error: error.message,
     });
   }
 });
@@ -212,3 +216,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Adefam backend running on port ${PORT}`);
 });
+
